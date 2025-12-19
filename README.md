@@ -22,7 +22,7 @@ After install, the CLI entrypoint is:
 
 ## Quickstart (build locally)
 
-1) Put raw datasets under `data/raw/` (structure documented in `docs/DATA_LAYOUT.md`).
+1) Put raw datasets under `data/raw/` (see `scripts/ingest/` for expected layout per source).
 2) Build processed outputs:
 
 - `ldc ingest --all`
@@ -42,3 +42,7 @@ Downstream repos can fetch LV0 release bundles instead of rebuilding:
 - `ldc fetch --release latest --dest ./`
 
 This extracts into the destination so `data/processed/...` exists.
+
+## Docs
+
+- `docs/ROADMAP.md`
