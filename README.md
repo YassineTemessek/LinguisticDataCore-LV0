@@ -20,6 +20,12 @@ All higher levels should *consume* LV0 outputs instead of re-ingesting data inde
 - Manifests & QA outputs: `outputs/`
 - Release assets: `outputs/release_assets/` (per-language zip bundles + manifest JSON)
 
+Arabic (not exhaustive) typically includes:
+
+- `data/processed/arabic/quran_lemmas_enriched.jsonl`
+- `data/processed/arabic/word_root_map_filtered.jsonl`
+- `data/processed/arabic/arabic_words_binary_roots.jsonl` (includes `root_norm` + `binary_root`)
+
 ## Quickstart 🚀
 
 Install (editable):
@@ -41,6 +47,7 @@ Consume releases (downstream):
 ## Docs 📚
 
 - Roadmap (ordered): `docs/ROADMAP.md`
+- Arabic fields (root + binary root): `docs/ARABIC_FIELDS.md`
 
 ## Contact 🤝
 
