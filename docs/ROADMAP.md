@@ -9,6 +9,7 @@ This roadmap is focused on keeping data stable and reproducible for LV2/LV3/LV4.
 - Freeze the canonical “lexeme row” contract (required keys + optional keys) and document it.
 - Define stable file naming conventions under `data/processed/` per language/source.
 - Ensure every processed file has provenance fields (source name, stage/script, and stable ids).
+- For Arabic rows with a known `root`, include `root_norm` and `binary_root` (canonical: first 2 letters of the accepted root).
 
 ## Phase 1: Validation gates (must-have)
 
@@ -65,4 +66,3 @@ Milestones:
 - Which processed outputs are “required canonicals” vs “optional extras” per language?
 - What’s the minimal provenance schema that all sources must include?
 - Should bundle manifests include content hashes for each file?
-

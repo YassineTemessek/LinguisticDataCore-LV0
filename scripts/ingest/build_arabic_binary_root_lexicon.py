@@ -56,15 +56,13 @@ def derive_binary_root(root_norm: str, *, weak_letters: str) -> tuple[str, str, 
     Returns: (binary_root, method, weakless_root)
 
     - binary_root_first2 is always the first two chars of `root_norm` (if available)
-    - binary_root prefers the first two chars after removing weak letters (if available)
+    - LV0 canonical binary_root is the first two chars of `root_norm`
     """
     r = root_norm or ""
     first2 = r[:2] if len(r) >= 2 else ""
     weak_set = set((weak_letters or "").strip())
     weakless = "".join(ch for ch in r if ch not in weak_set)
     weakless2 = weakless[:2] if len(weakless) >= 2 else ""
-    if weakless2:
-        return weakless2, "weakless_first2", weakless
     if first2:
         return first2, "first2", weakless
     return "", "missing", weakless
@@ -137,6 +135,7 @@ def build(
                 "binary_root": binary_root,
                 "binary_root_method": method,
                 "binary_root_first2": root_norm[:2] if len(root_norm) >= 2 else "",
+                "binary_root_weakless_first2": weakless_root[:2] if len(weakless_root) >= 2 else "",
                 "language": "ara",
                 "stage": "Attested",
                 "script": "Arabic",
@@ -186,4 +185,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

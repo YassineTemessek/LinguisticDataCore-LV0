@@ -10,6 +10,40 @@ _HTML_TAG_RE = re.compile(r"<[^>]+>")
 _WS_RE = re.compile(r"\s+")
 _IPA_STRESS_MARKS = str.maketrans({"\u02c8": "", "\u02cc": "", "'": ""})  # ˈ ˌ '
 
+_AR_DIACRITICS_RE = re.compile(r"[\u064B-\u065F\u0670\u0640]")
+_AR_ROOT_NORM_MAP = str.maketrans(
+    {
+        "أ": "ا",
+        "إ": "ا",
+        "آ": "ا",
+        "ٱ": "ا",
+        "ى": "ي",
+        "ؤ": "و",
+        "ئ": "ي",
+        "ة": "ه",
+    }
+)
+
+
+def normalize_arabic_root(root: str) -> str:
+    root = (root or "").strip()
+    if not root:
+        return ""
+    root = _AR_DIACRITICS_RE.sub("", root)
+    root = root.translate(_AR_ROOT_NORM_MAP)
+    return root
+
+
+def derive_binary_root(root: str) -> tuple[str, str]:
+    """
+    LV0 canonical Arabic binary root: first 2 chars of the normalized root.
+    Returns: (binary_root, method)
+    """
+    root_norm = normalize_arabic_root(root)
+    if len(root_norm) >= 2:
+        return root_norm[:2], "first2"
+    return "", "missing"
+
 
 def strip_html(text: str) -> str:
     if not text:
@@ -71,6 +105,19 @@ def ensure_min_schema(
     rec["script"] = str(rec.get("script") or default_script or "").strip()
     rec["source"] = str(rec.get("source") or default_source or "").strip()
     rec["lemma_status"] = str(rec.get("lemma_status") or default_lemma_status or "").strip()
+
+    root = str(rec.get("root") or "").strip()
+    if root:
+        rec["root"] = root
+        if rec["language"].startswith("ara") and rec["script"] == "Arabic":
+            root_norm = normalize_arabic_root(root)
+            if root_norm and not rec.get("root_norm"):
+                rec["root_norm"] = root_norm
+            if not rec.get("binary_root"):
+                binary_root, method = derive_binary_root(root)
+                if binary_root:
+                    rec["binary_root"] = binary_root
+                rec.setdefault("binary_root_method", method)
 
     if ("ipa" in rec) or ("ipa_raw" in rec):
         ipa_raw = str(rec.get("ipa_raw") or rec.get("ipa") or "")

@@ -43,6 +43,7 @@ def validate_jsonl(path: Path, *, sample_errors: int = 10) -> dict[str, Any]:
     missing_required = {k: 0 for k in REQUIRED}
     pos_type_errors = 0
     wrapped_ipa = 0
+    arabic_missing_binary_root = 0
 
     with path.open("r", encoding="utf-8") as fh:
         for line_num, line in enumerate(fh, start=1):
@@ -72,6 +73,15 @@ def validate_jsonl(path: Path, *, sample_errors: int = 10) -> dict[str, Any]:
                 wrapped_ipa += 1
                 row_errors.append("ipa_wrapped")
 
+            lang = str(rec.get("language") or "")
+            if lang.startswith("ara") and rec.get("script") == "Arabic":
+                root = str(rec.get("root") or "").strip()
+                if root:
+                    br = str(rec.get("binary_root") or "").strip()
+                    if not br:
+                        arabic_missing_binary_root += 1
+                        row_errors.append("arabic_missing_binary_root")
+
             if row_errors:
                 invalid += 1
                 if invalid <= sample_errors:
@@ -84,6 +94,7 @@ def validate_jsonl(path: Path, *, sample_errors: int = 10) -> dict[str, Any]:
         "missing_required": missing_required,
         "pos_type_errors": pos_type_errors,
         "wrapped_ipa": wrapped_ipa,
+        "arabic_missing_binary_root": arabic_missing_binary_root,
     }
 
 

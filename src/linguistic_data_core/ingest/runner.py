@@ -58,6 +58,7 @@ def build_steps(*, python_exe: str, repo_root: Path, resources_dir: Path | None)
     scripts_dir = repo_root / "scripts" / "ingest"
     data_raw = repo_root / "data" / "raw"
     data_processed = repo_root / "data" / "processed"
+    resources_root = resources_dir if resources_dir is not None else data_raw
 
     return [
         Step(
@@ -73,6 +74,36 @@ def build_steps(*, python_exe: str, repo_root: Path, resources_dir: Path | None)
             ],
             required_all_inputs=(data_raw / "wiktionary_extracted",),
             outputs=(data_processed / "wiktionary_stardict" / "raw",),
+        ),
+        Step(
+            name="arabic:ingest_word_root_map",
+            tags=frozenset({"arabic"}),
+            cmd=[
+                python_exe,
+                str(scripts_dir / "ingest_arabic_word_root_map.py"),
+                "--input",
+                str(resources_root / "arabic" / "word_root_map.csv" if resources_dir is None else (resources_root / "word_root_map.csv")),
+                "--output",
+                str(data_processed / "_intermediate" / "arabic" / "word_root_map.jsonl"),
+            ],
+            required_all_inputs=(
+                (resources_root / "arabic" / "word_root_map.csv") if resources_dir is None else (resources_root / "word_root_map.csv"),
+            ),
+            outputs=(data_processed / "_intermediate" / "arabic" / "word_root_map.jsonl",),
+        ),
+        Step(
+            name="arabic:clean_word_root_map",
+            tags=frozenset({"arabic"}),
+            cmd=[
+                python_exe,
+                str(scripts_dir / "clean_word_root_map.py"),
+                "--input",
+                str(data_processed / "_intermediate" / "arabic" / "word_root_map.jsonl"),
+                "--output",
+                str(data_processed / "arabic" / "word_root_map_filtered.jsonl"),
+            ],
+            required_all_inputs=(data_processed / "_intermediate" / "arabic" / "word_root_map.jsonl",),
+            outputs=(data_processed / "arabic" / "word_root_map_filtered.jsonl",),
         ),
         Step(
             name="arabic:ingest_quran_morphology",
@@ -101,6 +132,25 @@ def build_steps(*, python_exe: str, repo_root: Path, resources_dir: Path | None)
             ],
             required_all_inputs=(data_processed / "_intermediate" / "arabic" / "quran_lemmas.jsonl",),
             outputs=(data_processed / "arabic" / "quran_lemmas_enriched.jsonl",),
+        ),
+        Step(
+            name="arabic:build_binary_root_lexicon",
+            tags=frozenset({"arabic"}),
+            cmd=[
+                python_exe,
+                str(scripts_dir / "build_arabic_binary_root_lexicon.py"),
+                "--word-root-map",
+                str(data_processed / "arabic" / "word_root_map_filtered.jsonl"),
+                "--quran-lemmas",
+                str(data_processed / "arabic" / "quran_lemmas_enriched.jsonl"),
+                "--output",
+                str(data_processed / "arabic" / "arabic_words_binary_roots.jsonl"),
+            ],
+            required_any_inputs=(
+                data_processed / "arabic" / "word_root_map_filtered.jsonl",
+                data_processed / "arabic" / "quran_lemmas_enriched.jsonl",
+            ),
+            outputs=(data_processed / "arabic" / "arabic_words_binary_roots.jsonl",),
         ),
     ]
 
@@ -178,4 +228,3 @@ def run_ingest(
         out_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")
 
     return 2 if any_failed else 0
-
