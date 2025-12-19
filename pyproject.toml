@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "linguistic-data-core"
+version = "0.0.0"
+description = "LV0 data core: ingest, validate, and package canonical multilingual datasets."
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [{name = "YassineTemessek"}]
+dependencies = [
+  "numpy>=2.2,<3",
+  "pandas>=2.3,<3",
+  "pyarrow>=22,<23",
+]
+
+[project.scripts]
+ldc = "linguistic_data_core.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
