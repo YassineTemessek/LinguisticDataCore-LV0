@@ -12,7 +12,9 @@ Thumbs.db
 Desktop.ini
 
 # Local data and outputs
-data/
+data/*
+!data/raw/
+data/raw/*
+!data/raw/README.md
 outputs/*
 !outputs/README.md
-
