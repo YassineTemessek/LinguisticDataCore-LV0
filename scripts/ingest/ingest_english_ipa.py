@@ -2,7 +2,7 @@
 Build a simple Modern English IPA lexicon from ipa-dict (en_US + en_UK).
 
 Output: JSONL at data/processed/_intermediate/english/english_ipa.jsonl
-Fields: lemma, orthography, ipa, language, stage, script, lemma_status, source, variant.
+Fields: lemma, orthography, ipa, language, lemma_status, source, variant.
 """
 
 from __future__ import annotations
@@ -53,8 +53,6 @@ def merge_sources() -> List[dict]:
                     "ipa_raw": ipa,
                     "ipa": normalize_ipa(ipa),
                     "language": "eng",
-                    "stage": "Modern",
-                    "script": "Latin",
                     "lemma_status": "auto_brut",
                     "source": f"ipa-dict:{variant}",
                     "source_ref": f"ipa-dict:{variant}:{word}:{idx}",

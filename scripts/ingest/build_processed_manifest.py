@@ -15,7 +15,7 @@ from pathlib import Path
 from typing import Any
 
 
-REQUIRED_FIELDS = ("id", "lemma", "language", "stage", "script", "source", "lemma_status")
+REQUIRED_FIELDS = ("id", "lemma", "language", "source", "lemma_status", "translit", "ipa")
 
 
 def summarize_jsonl(path: Path, sample: int = 2000) -> dict[str, Any]:
@@ -46,6 +46,10 @@ def summarize_jsonl(path: Path, sample: int = 2000) -> dict[str, Any]:
                     key_counts[k] = key_counts.get(k, 0) + 1
 
             for k in REQUIRED_FIELDS:
+                if k in ("ipa", "translit"):
+                    if k in rec:
+                        counts[k] += 1
+                    continue
                 if rec.get(k):
                     counts[k] += 1
             for k in optional:

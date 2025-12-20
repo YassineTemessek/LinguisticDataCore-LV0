@@ -54,8 +54,6 @@ def read_morph(path: pathlib.Path) -> Dict[Tuple[str, str], Dict[str, str]]:
                     "example_surface": surface,
                     "source_ref": ref,
                     "language": "ara-qur",
-                    "stage": "Classical",
-                    "script": "Arabic",
                     "lemma_status": "silver",
                     "source": "quranic-corpus-morphology",
                     "features": feat_map,
@@ -85,4 +83,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

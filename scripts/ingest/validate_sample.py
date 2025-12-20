@@ -11,8 +11,6 @@ SAMPLE = BASE / "data" / "samples" / "lexeme_sample.jsonl"
 REQUIRED_KEYS = [
     "id",
     "language",
-    "stage",
-    "script",
     "date_window",
     "orthography",
     "translit",

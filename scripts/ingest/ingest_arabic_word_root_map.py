@@ -45,8 +45,6 @@ def ingest(input_path: pathlib.Path, output_path: pathlib.Path) -> int:
                 "ipa_raw": ipa,
                 "ipa": normalize_ipa(ipa),
                 "language": "ara",
-                "stage": "Classical",
-                "script": "Arabic",
                 "source": "word_root_map.csv",
                 "source_ref": f"word_root_map.csv:row:{row_num}:{word}:{root}",
                 "lemma_status": "auto_brut",
@@ -69,4 +67,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

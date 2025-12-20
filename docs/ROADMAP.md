@@ -14,7 +14,8 @@ This roadmap is focused on keeping data stable and reproducible for LV2/LV3/LV4.
 ## Phase 1: Validation gates (must-have)
 
 - Expand `scripts/ingest/validate_processed.py` to enforce:
-  - required keys present (`id`, `lemma`, `language/lang`, `stage`, `source` as applicable)
+  - required keys present (`id`, `lemma`, `language/lang`, `source` as applicable)
+  - `translit` and `ipa` fields exist (may be empty early)
   - no empty `lemma`
   - `id` uniqueness within each file
   - consistent encoding and JSONL correctness

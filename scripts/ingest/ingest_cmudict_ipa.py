@@ -4,7 +4,7 @@ Convert CMUdict ARPAbet to IPA and emit a simple English lexicon.
 Input: data/raw/english/cmudict/cmudict.dict
 Output: data/processed/_intermediate/english/english_cmudict_ipa.jsonl
 
-Fields: lemma, orthography, ipa, language=eng, stage=Modern, script=Latin, lemma_status=auto_brut, source=cmudict, pos="" (CMUdict has no POS).
+Fields: lemma, orthography, ipa, language=eng, lemma_status=auto_brut, source=cmudict, pos="" (CMUdict has no POS).
 """
 
 from __future__ import annotations
@@ -52,8 +52,6 @@ def parse_cmudict(path: pathlib.Path) -> list[dict]:
                 "ipa_raw": ipa,
                 "ipa": normalize_ipa(ipa),
                 "language": "eng",
-                "stage": "Modern",
-                "script": "Latin",
                 "lemma_status": "auto_brut",
                 "source": "cmudict",
                 "source_ref": f"cmudict:line:{line_num}:{word}",

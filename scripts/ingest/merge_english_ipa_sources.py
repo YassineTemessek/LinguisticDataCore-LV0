@@ -53,7 +53,7 @@ def merge(
         rec["ipa"] = ipa_val
         rec["pos"] = coerce_pos_list(rec.get("pos"))
         rec["source_priority"] = priority
-        rec = ensure_min_schema(rec, default_language="eng", default_stage="Modern", default_script="Latin", default_lemma_status="auto_brut")
+        rec = ensure_min_schema(rec, default_language="eng", default_lemma_status="auto_brut")
 
         if key not in merged:
             merged[key] = rec

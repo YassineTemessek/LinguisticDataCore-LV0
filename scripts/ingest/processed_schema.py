@@ -101,15 +101,26 @@ def ensure_min_schema(
     rec["lemma"] = lemma
 
     rec["language"] = str(rec.get("language") or default_language or "").strip()
-    rec["stage"] = str(rec.get("stage") or default_stage or "").strip()
-    rec["script"] = str(rec.get("script") or default_script or "").strip()
+    # LV0 schema A: `stage` and `script` are not required row fields anymore.
+    # Stage is represented by folder/file boundaries; script can be derived when needed.
+    # We keep any provided values, but do not inject defaults.
+    if "stage" in rec and rec.get("stage") is not None:
+        rec["stage"] = str(rec.get("stage") or "").strip()
+    if "script" in rec and rec.get("script") is not None:
+        rec["script"] = str(rec.get("script") or "").strip()
     rec["source"] = str(rec.get("source") or default_source or "").strip()
     rec["lemma_status"] = str(rec.get("lemma_status") or default_lemma_status or "").strip()
+
+    # Required (structural) fields for LV0 processed JSONL:
+    # - `translit`: always present (can equal lemma for Latin-script languages)
+    # - `ipa`: always present (can be empty when unknown)
+    if not rec.get("translit"):
+        rec["translit"] = lemma
 
     root = str(rec.get("root") or "").strip()
     if root:
         rec["root"] = root
-        if rec["language"].startswith("ara") and rec["script"] == "Arabic":
+        if rec["language"].startswith("ara"):
             root_norm = normalize_arabic_root(root)
             if root_norm and not rec.get("root_norm"):
                 rec["root_norm"] = root_norm
@@ -123,6 +134,9 @@ def ensure_min_schema(
         ipa_raw = str(rec.get("ipa_raw") or rec.get("ipa") or "")
         rec.setdefault("ipa_raw", ipa_raw)
         rec["ipa"] = normalize_ipa(ipa_raw)
+    else:
+        rec["ipa_raw"] = ""
+        rec["ipa"] = ""
 
     if "gloss" in rec and "gloss_html" not in rec:
         rec["gloss_html"] = rec.get("gloss", "")
@@ -135,9 +149,8 @@ def ensure_min_schema(
     if not rec.get("id"):
         rec["id"] = stable_id(
             rec.get("language"),
-            rec.get("stage"),
-            rec.get("script"),
             rec.get("source"),
+            rec.get("source_ref"),
             rec.get("lemma"),
             rec.get("orthography"),
             rec.get("root"),
@@ -149,6 +162,10 @@ def ensure_min_schema(
 
 
 def iter_missing_required(rec: dict) -> Iterable[str]:
-    for k in ("id", "lemma", "language", "stage", "script", "source", "lemma_status"):
+    for k in ("id", "lemma", "language", "source", "lemma_status"):
         if not rec.get(k):
+            yield k
+    # `translit` and `ipa` are required *fields* (must exist), but may be empty in early ingestion.
+    for k in ("translit", "ipa"):
+        if k not in rec:
             yield k

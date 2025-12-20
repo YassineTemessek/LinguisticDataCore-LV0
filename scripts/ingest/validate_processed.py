@@ -19,12 +19,12 @@ from pathlib import Path
 from typing import Any, Iterable
 
 
-REQUIRED = ("id", "lemma", "language", "stage", "script", "source", "lemma_status")
+REQUIRED = ("id", "lemma", "language", "source", "lemma_status", "translit", "ipa")
 
 DEFAULT_CANONICAL: tuple[Path, ...] = (
-    Path("data/processed/arabic/quran_lemmas_enriched.jsonl"),
-    Path("data/processed/arabic/hf_roots.jsonl"),
-    Path("data/processed/arabic/word_root_map_filtered.jsonl"),
+    Path("data/processed/arabic/classical/quran_lemmas_enriched.jsonl"),
+    Path("data/processed/arabic/classical/hf_roots.jsonl"),
+    Path("data/processed/arabic/classical/word_root_map_filtered.jsonl"),
     Path("data/processed/english/english_ipa_merged_pos.jsonl"),
     Path("data/processed/wiktionary_stardict/filtered/Latin-English_Wiktionary_dictionary_stardict_filtered.jsonl"),
     Path("data/processed/wiktionary_stardict/filtered/Ancient_Greek-English_Wiktionary_dictionary_stardict_filtered.jsonl"),
@@ -61,6 +61,11 @@ def validate_jsonl(path: Path, *, sample_errors: int = 10) -> dict[str, Any]:
 
             row_errors: list[str] = []
             for k in REQUIRED:
+                if k in ("ipa", "translit"):
+                    if k not in rec:
+                        missing_required[k] += 1
+                        row_errors.append(f"missing:{k}")
+                    continue
                 if not rec.get(k):
                     missing_required[k] += 1
                     row_errors.append(f"missing:{k}")
@@ -74,7 +79,7 @@ def validate_jsonl(path: Path, *, sample_errors: int = 10) -> dict[str, Any]:
                 row_errors.append("ipa_wrapped")
 
             lang = str(rec.get("language") or "")
-            if lang.startswith("ara") and rec.get("script") == "Arabic":
+            if lang.startswith("ara"):
                 root = str(rec.get("root") or "").strip()
                 if root:
                     br = str(rec.get("binary_root") or "").strip()

@@ -6,10 +6,12 @@ This document defines the LV0 canonical fields used for Arabic lexeme rows and d
 
 - `lemma` (string, required): the surface form as provided by the source.
 - `language` (string, required): `ara` / `ara-qur` / etc.
-- `stage` (string, required): free-text label (e.g., `Classical`, `Modern`, `Attested`).
-- `script` (string, required): usually `Arabic`.
+- `stage` (folder/file level): stage is represented by dataset boundaries (folder/file naming), not required in each row.
+- `script` (optional): can be omitted; downstream can infer when needed.
 - `source` (string, required): dataset/source identifier.
 - `id` (string, required): stable row id.
+- `translit` (string, required): transliteration (can equal `lemma` when no romanization is needed).
+- `ipa` (string, required): IPA string (can be empty when unknown).
 
 ## Root-derived fields
 
@@ -28,4 +30,3 @@ These fields exist when the row has a known (widely accepted) Arabic root.
 
 - LV0 treats `stage` as free text, but once a label is used in published outputs it should remain stable.
 - LV0 does not attempt deeper linguistic reinterpretations in the canonical layer; it keeps derivations simple and reproducible.
-

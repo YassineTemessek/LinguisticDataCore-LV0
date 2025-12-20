@@ -130,8 +130,6 @@ def convert_package(
                 "gloss_html": gloss,
                 "gloss_plain": gloss_plain,
                 "language": lang,
-                "stage": stage,
-                "script": script,
                 "source": source,
                 "source_ref": f"{source_ref_prefix}:{word}" if source_ref_prefix else word,
                 "lemma_status": "auto_brut",

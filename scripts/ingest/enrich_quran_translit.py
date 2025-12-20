@@ -2,7 +2,7 @@
 Generate basic transliteration and IPA for Quran lemmas (Arabic script).
 
 Input: data/processed/_intermediate/arabic/quran_lemmas.jsonl
-Output: data/processed/arabic/quran_lemmas_enriched.jsonl
+Output: data/processed/arabic/classical/quran_lemmas_enriched.jsonl
 """
 
 from __future__ import annotations
@@ -114,7 +114,7 @@ def enrich(input_path: pathlib.Path, output_path: pathlib.Path) -> int:
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--input", type=pathlib.Path, default=pathlib.Path("data/processed/_intermediate/arabic/quran_lemmas.jsonl"))
-    ap.add_argument("--output", type=pathlib.Path, default=pathlib.Path("data/processed/arabic/quran_lemmas_enriched.jsonl"))
+    ap.add_argument("--output", type=pathlib.Path, default=pathlib.Path("data/processed/arabic/classical/quran_lemmas_enriched.jsonl"))
     args = ap.parse_args()
 
     args.output.parent.mkdir(parents=True, exist_ok=True)
@@ -124,4 +124,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

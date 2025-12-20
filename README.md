@@ -22,9 +22,9 @@ All higher levels should *consume* LV0 outputs instead of re-ingesting data inde
 
 Arabic (not exhaustive) typically includes:
 
-- `data/processed/arabic/quran_lemmas_enriched.jsonl`
-- `data/processed/arabic/word_root_map_filtered.jsonl`
-- `data/processed/arabic/arabic_words_binary_roots.jsonl` (includes `root_norm` + `binary_root`)
+- `data/processed/arabic/classical/quran_lemmas_enriched.jsonl`
+- `data/processed/arabic/classical/word_root_map_filtered.jsonl`
+- `data/processed/arabic/classical/arabic_words_binary_roots.jsonl` (includes `root_norm` + `binary_root`)
 
 ## Quickstart 🚀
 

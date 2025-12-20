@@ -4,7 +4,7 @@ adding a lightweight `type` classification so downstream code can ignore
 clitics/function words by default.
 
 Input:  data/processed/_intermediate/arabic/word_root_map.jsonl
-Output: data/processed/arabic/word_root_map_filtered.jsonl
+Output: data/processed/arabic/classical/word_root_map_filtered.jsonl
 """
 
 from __future__ import annotations
@@ -53,8 +53,6 @@ def clean(input_path: pathlib.Path, output_path: pathlib.Path, *, keep_empty_roo
             rec = ensure_min_schema(
                 rec,
                 default_language="ara",
-                default_stage="Classical",
-                default_script="Arabic",
                 default_source="word_root_map.csv",
                 default_lemma_status="auto_brut",
             )
@@ -66,7 +64,7 @@ def clean(input_path: pathlib.Path, output_path: pathlib.Path, *, keep_empty_roo
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--input", type=pathlib.Path, default=pathlib.Path("data/processed/_intermediate/arabic/word_root_map.jsonl"))
-    ap.add_argument("--output", type=pathlib.Path, default=pathlib.Path("data/processed/arabic/word_root_map_filtered.jsonl"))
+    ap.add_argument("--output", type=pathlib.Path, default=pathlib.Path("data/processed/arabic/classical/word_root_map_filtered.jsonl"))
     ap.add_argument("--keep-empty-root", action="store_true", help="Keep rows with empty root (still classified).")
     args = ap.parse_args()
 
@@ -76,4 +74,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

@@ -4,11 +4,11 @@ Build a wide-coverage Arabic word/lemma lexicon with derived binary roots.
 LV2 goal: regroup Arabic words by a biconsonantal (2-letter) nucleus.
 
 Inputs (default):
-  - data/processed/arabic/word_root_map_filtered.jsonl
-  - data/processed/arabic/quran_lemmas_enriched.jsonl
+  - data/processed/arabic/classical/word_root_map_filtered.jsonl
+  - data/processed/arabic/classical/quran_lemmas_enriched.jsonl
 
 Output (default):
-  - data/processed/arabic/arabic_words_binary_roots.jsonl
+  - data/processed/arabic/classical/arabic_words_binary_roots.jsonl
 """
 
 from __future__ import annotations
@@ -137,8 +137,6 @@ def build(
                 "binary_root_first2": root_norm[:2] if len(root_norm) >= 2 else "",
                 "binary_root_weakless_first2": weakless_root[:2] if len(weakless_root) >= 2 else "",
                 "language": "ara",
-                "stage": "Attested",
-                "script": "Arabic",
                 "source": "lv2:arabic_binary_root_lexicon",
                 "lemma_status": str(rec.get("lemma_status") or "auto_brut"),
                 "sources": [],
@@ -158,7 +156,7 @@ def build(
         for _, rec in sorted(merged.items(), key=lambda kv: (kv[0][0], kv[0][1])):
             rec["sources"] = sorted(set(rec.get("sources") or []))
             rec["n_sources"] = len(rec["sources"])
-            rec = ensure_min_schema(rec, default_language="ara", default_stage="Attested", default_script="Arabic", default_source="lv2:arabic_binary_root_lexicon", default_lemma_status="auto_brut")
+            rec = ensure_min_schema(rec, default_language="ara", default_source="lv2:arabic_binary_root_lexicon", default_lemma_status="auto_brut")
             out_f.write(json.dumps(rec, ensure_ascii=False) + "\n")
             total += 1
     return total
@@ -166,9 +164,9 @@ def build(
 
 def main() -> None:
     ap = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    ap.add_argument("--word-root-map", type=Path, default=Path("data/processed/arabic/word_root_map_filtered.jsonl"))
-    ap.add_argument("--quran-lemmas", type=Path, default=Path("data/processed/arabic/quran_lemmas_enriched.jsonl"))
-    ap.add_argument("--output", type=Path, default=Path("data/processed/arabic/arabic_words_binary_roots.jsonl"))
+    ap.add_argument("--word-root-map", type=Path, default=Path("data/processed/arabic/classical/word_root_map_filtered.jsonl"))
+    ap.add_argument("--quran-lemmas", type=Path, default=Path("data/processed/arabic/classical/quran_lemmas_enriched.jsonl"))
+    ap.add_argument("--output", type=Path, default=Path("data/processed/arabic/classical/arabic_words_binary_roots.jsonl"))
     ap.add_argument("--weak-letters", type=str, default=DEFAULT_WEAK_LETTERS, help="Letters removed when forming the preferred binary root.")
     ap.add_argument("--keep-missing-root", action="store_true", help="Keep rows where `root` is missing/empty (binary_root will be empty).")
     args = ap.parse_args()

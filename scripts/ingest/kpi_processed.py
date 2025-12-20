@@ -23,12 +23,12 @@ from pathlib import Path
 from typing import Any, Iterable
 
 
-REQUIRED_FIELDS = ("id", "lemma", "language", "stage", "script", "source", "lemma_status")
+REQUIRED_FIELDS = ("id", "lemma", "language", "source", "lemma_status", "translit", "ipa")
 
 DEFAULT_CANONICAL: tuple[Path, ...] = (
-    Path("data/processed/arabic/quran_lemmas_enriched.jsonl"),
-    Path("data/processed/arabic/hf_roots.jsonl"),
-    Path("data/processed/arabic/word_root_map_filtered.jsonl"),
+    Path("data/processed/arabic/classical/quran_lemmas_enriched.jsonl"),
+    Path("data/processed/arabic/classical/hf_roots.jsonl"),
+    Path("data/processed/arabic/classical/word_root_map_filtered.jsonl"),
     Path("data/processed/english/english_ipa_merged_pos.jsonl"),
     Path("data/processed/wiktionary_stardict/filtered/Latin-English_Wiktionary_dictionary_stardict_filtered.jsonl"),
     Path("data/processed/wiktionary_stardict/filtered/Ancient_Greek-English_Wiktionary_dictionary_stardict_filtered.jsonl"),
@@ -137,6 +137,11 @@ def summarize_jsonl(
             bucket["rows"] += 1
 
             for k in REQUIRED_FIELDS:
+                if k in ("ipa", "translit"):
+                    if k not in rec:
+                        assert summary.missing_required is not None
+                        summary.missing_required[k] += 1
+                    continue
                 if not _has_text(rec.get(k)):
                     assert summary.missing_required is not None
                     summary.missing_required[k] += 1
@@ -165,13 +170,7 @@ def summarize_jsonl(
                     else:
                         seen_id.add(id_hash)
 
-                lemma_key = "\t".join(
-                    [
-                        str(rec.get("language") or ""),
-                        str(rec.get("stage") or ""),
-                        _norm_lemma(str(rec.get("lemma") or "")),
-                    ]
-                )
+                lemma_key = "\t".join([str(rec.get("language") or ""), _norm_lemma(str(rec.get("lemma") or ""))])
                 lemma_key_hash = _hash_key(lemma_key)
                 if lemma_key_hash and seen_lemma_key is not None:
                     if lemma_key_hash in seen_lemma_key:
@@ -185,7 +184,7 @@ def summarize_jsonl(
             "rows_scanned": dup_rows_scanned,
             "truncated": dup_truncated,
             "duplicate_ids": dup_id,
-            "duplicate_language_stage_lemma": dup_lemma_key,
+            "duplicate_language_lemma": dup_lemma_key,
         }
 
     return summary, by_lang_source
@@ -422,4 +421,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-
