@@ -42,6 +42,7 @@ def ingest(parquet_path: Path, out_path: Path) -> int:
             tr, ipa = translit_and_ipa(lemma)
             rec = {
                 "lemma": lemma,
+                "root": lemma,
                 "definition": definition,
                 "translit": tr,
                 "ipa_raw": ipa,

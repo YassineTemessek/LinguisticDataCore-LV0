@@ -20,9 +20,10 @@ from typing import Any, Iterable
 
 
 DEFAULT_CANONICAL: tuple[Path, ...] = (
-    Path("data/processed/arabic/quran_lemmas_enriched.jsonl"),
-    Path("data/processed/arabic/hf_roots.jsonl"),
-    Path("data/processed/arabic/word_root_map_filtered.jsonl"),
+    Path("data/processed/arabic/classical/quran_lemmas_enriched.jsonl"),
+    Path("data/processed/arabic/classical/hf_roots.jsonl"),
+    Path("data/processed/arabic/classical/word_root_map_filtered.jsonl"),
+    Path("data/processed/arabic/classical/lexemes.jsonl"),
     Path("data/processed/english/english_ipa_merged_pos.jsonl"),
     Path("data/processed/wiktionary_stardict/filtered/Latin-English_Wiktionary_dictionary_stardict_filtered.jsonl"),
     Path("data/processed/wiktionary_stardict/filtered/Ancient_Greek-English_Wiktionary_dictionary_stardict_filtered.jsonl"),
@@ -138,4 +139,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

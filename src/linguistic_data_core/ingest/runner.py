@@ -177,6 +177,31 @@ def build_steps(*, python_exe: str, repo_root: Path, resources_dir: Path | None)
             ),
             outputs=(arabic_out / "arabic_words_binary_roots.jsonl",),
         ),
+        Step(
+            name="arabic:merge_classical_lexemes",
+            tags=frozenset({"arabic"}),
+            cmd=[
+                python_exe,
+                str(scripts_dir / "merge_arabic_classical_lexemes.py"),
+                "--quran",
+                str(arabic_out / "quran_lemmas_enriched.jsonl"),
+                "--word-root-map",
+                str(arabic_out / "word_root_map_filtered.jsonl"),
+                "--hf-roots",
+                str(arabic_out / "hf_roots.jsonl"),
+                "--binary-root-lexicon",
+                str(arabic_out / "arabic_words_binary_roots.jsonl"),
+                "--output",
+                str(arabic_out / "lexemes.jsonl"),
+            ],
+            required_any_inputs=(
+                arabic_out / "quran_lemmas_enriched.jsonl",
+                arabic_out / "word_root_map_filtered.jsonl",
+                arabic_out / "hf_roots.jsonl",
+                arabic_out / "arabic_words_binary_roots.jsonl",
+            ),
+            outputs=(arabic_out / "lexemes.jsonl",),
+        ),
     ]
 
 
