@@ -56,4 +56,4 @@ For collaboration: `yassine.temessek@hotmail.com`
 
 ## Suggested GitHub “About” 📝
 
-Shared data core (LV0): raw → canonical processed datasets → validation → per-language release bundles.
+LV0 data core: deterministic raw→processed pipeline, per-language/stage `lexemes.jsonl`, validation, and release bundles.
