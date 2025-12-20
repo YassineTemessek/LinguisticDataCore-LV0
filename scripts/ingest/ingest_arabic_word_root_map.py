@@ -2,7 +2,7 @@
 Ingest word_root_map.csv into a JSONL with simple transliteration/IPA.
 
 Input (default): data/raw/arabic/word_root_map.csv
-Output: data/processed/_intermediate/arabic/word_root_map.jsonl
+Output: data/processed/arabic/classical/sources/word_root_map_raw.jsonl
 
 If you keep datasets outside the repo, set `LC_RESOURCES_DIR` to point at that folder
 and the default input will become: %LC_RESOURCES_DIR%/word_root_map.csv
@@ -59,7 +59,7 @@ def ingest(input_path: pathlib.Path, output_path: pathlib.Path) -> int:
 def main() -> None:
     ap = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     ap.add_argument("--input", type=pathlib.Path, default=default_input_path())
-    ap.add_argument("--output", type=pathlib.Path, default=pathlib.Path("data/processed/_intermediate/arabic/word_root_map.jsonl"))
+    ap.add_argument("--output", type=pathlib.Path, default=pathlib.Path("data/processed/arabic/classical/sources/word_root_map_raw.jsonl"))
     args = ap.parse_args()
     total = ingest(args.input, args.output)
     print(f"Wrote {total} records to {args.output}")

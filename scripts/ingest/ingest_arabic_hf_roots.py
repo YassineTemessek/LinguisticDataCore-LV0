@@ -1,7 +1,7 @@
 """
 Ingest Arabic roots from HF parquet into a simple JSONL with translit/IPA.
 
-Output: data/processed/arabic/classical/hf_roots.jsonl
+Output: data/processed/arabic/classical/sources/hf_roots.jsonl
 
 If you keep datasets outside the repo, set `LC_RESOURCES_DIR` to point at that folder
 and the default input will become: %LC_RESOURCES_DIR%/arabic_roots_hf/train-00000-of-00001.parquet
@@ -61,7 +61,7 @@ def ingest(parquet_path: Path, out_path: Path) -> int:
 def main() -> None:
     ap = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     ap.add_argument("--input", type=Path, default=default_input_path())
-    ap.add_argument("--output", type=Path, default=Path("data/processed/arabic/classical/hf_roots.jsonl"))
+    ap.add_argument("--output", type=Path, default=Path("data/processed/arabic/classical/sources/hf_roots.jsonl"))
     args = ap.parse_args()
     total = ingest(args.input, args.output)
     print(f"Wrote {total} records to {args.output}")

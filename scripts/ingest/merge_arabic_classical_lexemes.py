@@ -2,10 +2,9 @@
 Merge Arabic (classical) processed sources into a single canonical lexeme table.
 
 Inputs (default):
-  - data/processed/arabic/classical/quran_lemmas_enriched.jsonl
-  - data/processed/arabic/classical/word_root_map_filtered.jsonl
-  - data/processed/arabic/classical/hf_roots.jsonl
-  - data/processed/arabic/classical/arabic_words_binary_roots.jsonl
+  - data/processed/arabic/classical/sources/quran_lemmas_enriched.jsonl
+  - data/processed/arabic/classical/sources/word_root_map_filtered.jsonl
+  - data/processed/arabic/classical/sources/hf_roots.jsonl
 
 Output (default):
   - data/processed/arabic/classical/lexemes.jsonl
@@ -156,10 +155,9 @@ def merge_sources(sources: list[SourceFile], *, out_path: Path) -> dict[str, int
 
 def main() -> None:
     ap = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    ap.add_argument("--quran", type=Path, default=Path("data/processed/arabic/classical/quran_lemmas_enriched.jsonl"))
-    ap.add_argument("--word-root-map", type=Path, default=Path("data/processed/arabic/classical/word_root_map_filtered.jsonl"))
-    ap.add_argument("--hf-roots", type=Path, default=Path("data/processed/arabic/classical/hf_roots.jsonl"))
-    ap.add_argument("--binary-root-lexicon", type=Path, default=Path("data/processed/arabic/classical/arabic_words_binary_roots.jsonl"))
+    ap.add_argument("--quran", type=Path, default=Path("data/processed/arabic/classical/sources/quran_lemmas_enriched.jsonl"))
+    ap.add_argument("--word-root-map", type=Path, default=Path("data/processed/arabic/classical/sources/word_root_map_filtered.jsonl"))
+    ap.add_argument("--hf-roots", type=Path, default=Path("data/processed/arabic/classical/sources/hf_roots.jsonl"))
     ap.add_argument("--output", type=Path, default=Path("data/processed/arabic/classical/lexemes.jsonl"))
     args = ap.parse_args()
 
@@ -167,7 +165,6 @@ def main() -> None:
         SourceFile(path=args.quran, tag="quranic-corpus-morphology"),
         SourceFile(path=args.word_root_map, tag="word_root_map.csv"),
         SourceFile(path=args.hf_roots, tag="arabic_roots_hf"),
-        SourceFile(path=args.binary_root_lexicon, tag="lv0:arabic_binary_root_lexicon"),
     ]
     stats = merge_sources(sources, out_path=args.output)
     print(f"Wrote {stats['rows_out']} rows to {args.output} (scanned={stats['rows_in']})")
@@ -175,4 +172,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

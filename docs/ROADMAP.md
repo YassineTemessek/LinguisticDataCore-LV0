@@ -10,6 +10,9 @@ This roadmap is focused on keeping data stable and reproducible for LV2/LV3/LV4.
 - Define stable file naming conventions under `data/processed/` per language/source.
 - Ensure every processed file has provenance fields (source name, stage/script, and stable ids).
 - For Arabic rows with a known `root`, include `root_norm` and `binary_root` (canonical: first 2 letters of the accepted root).
+- Standardize layout per dataset:
+  - `data/processed/<language>/<stage>/sources/<source>.jsonl`
+  - `data/processed/<language>/<stage>/lexemes.jsonl` (merged canonical)
 
 ## Phase 1: Validation gates (must-have)
 
