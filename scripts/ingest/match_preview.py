@@ -47,7 +47,7 @@ PATHS = {
     "eng": Path("data/processed/english/english_ipa_merged_pos.jsonl"),
     "lat": Path("data/processed/wiktionary_stardict/filtered/Latin-English_Wiktionary_dictionary_stardict_filtered.jsonl"),
     "grc": Path("data/processed/wiktionary_stardict/filtered/Ancient_Greek-English_Wiktionary_dictionary_stardict_filtered.jsonl"),
-    "ara": Path("data/processed/arabic/quran_lemmas_enriched.jsonl"),
+    "ara": Path("data/processed/arabic/classical/lexemes.jsonl"),
 }
 
 
@@ -98,14 +98,27 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--output_csv", type=Path, default=Path("output/match_preview.csv"))
     ap.add_argument("--output_png", type=Path, default=Path("output/match_preview_heatmap.png"))
+    ap.add_argument(
+        "--ara",
+        type=Path,
+        default=PATHS["ara"],
+        help="Arabic lexeme JSONL to use (defaults to classical; Quranic is separate under data/processed/quranic_arabic/).",
+    )
     args = ap.parse_args()
+
+    paths = dict(PATHS)
+    paths["ara"] = args.ara
+    if not paths["ara"].exists():
+        fallback = Path("data/processed/quranic_arabic/lexemes.jsonl")
+        if fallback.exists():
+            paths["ara"] = fallback
 
     args.output_csv.parent.mkdir(parents=True, exist_ok=True)
     rows = []
     for concept, targ in CONCEPTS.items():
         forms = {}
         for lang in LANGS:
-            forms[lang] = load_first_match(PATHS[lang], targ.get(lang, []))
+            forms[lang] = load_first_match(paths[lang], targ.get(lang, []))
         row = {"concept": concept}
         for (l1, l2) in combinations(LANGS, 2):
             ipa1 = forms[l1]["ipa"]

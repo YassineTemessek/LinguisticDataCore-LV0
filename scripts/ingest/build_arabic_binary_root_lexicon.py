@@ -5,7 +5,7 @@ LV2 goal: regroup Arabic words by a biconsonantal (2-letter) nucleus.
 
 Inputs (default):
   - data/processed/arabic/classical/sources/word_root_map_filtered.jsonl
-  - data/processed/arabic/classical/sources/quran_lemmas_enriched.jsonl
+  - data/processed/quranic_arabic/sources/quran_lemmas_enriched.jsonl
 
 Output (default):
   - data/processed/arabic/classical/arabic_words_binary_roots.jsonl
@@ -165,7 +165,7 @@ def build(
 def main() -> None:
     ap = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     ap.add_argument("--word-root-map", type=Path, default=Path("data/processed/arabic/classical/sources/word_root_map_filtered.jsonl"))
-    ap.add_argument("--quran-lemmas", type=Path, default=Path("data/processed/arabic/classical/sources/quran_lemmas_enriched.jsonl"))
+    ap.add_argument("--quran-lemmas", type=Path, default=Path("data/processed/quranic_arabic/sources/quran_lemmas_enriched.jsonl"))
     ap.add_argument("--output", type=Path, default=Path("data/processed/arabic/classical/arabic_words_binary_roots.jsonl"))
     ap.add_argument("--weak-letters", type=str, default=DEFAULT_WEAK_LETTERS, help="Letters removed when forming the preferred binary root.")
     ap.add_argument("--keep-missing-root", action="store_true", help="Keep rows where `root` is missing/empty (binary_root will be empty).")

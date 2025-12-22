@@ -62,6 +62,9 @@ def build_steps(*, python_exe: str, repo_root: Path, resources_dir: Path | None)
 
     arabic_out = data_processed / "arabic" / "classical"
     arabic_sources = arabic_out / "sources"
+    quranic_out = data_processed / "quranic_arabic"
+    quranic_sources = quranic_out / "sources"
+    quranic_intermediate = data_processed / "_intermediate" / "quranic_arabic"
 
     return [
         Step(
@@ -109,18 +112,18 @@ def build_steps(*, python_exe: str, repo_root: Path, resources_dir: Path | None)
             outputs=(arabic_sources / "word_root_map_filtered.jsonl",),
         ),
         Step(
-            name="arabic:ingest_quran_morphology",
-            tags=frozenset({"arabic"}),
+            name="quranic_arabic:ingest_quran_morphology",
+            tags=frozenset({"quranic_arabic"}),
             cmd=[
                 python_exe,
                 str(scripts_dir / "ingest_quran_morphology.py"),
                 "--input",
                 str(data_raw / "arabic" / "quran-morphology" / "quran-morphology.txt"),
                 "--output",
-                str(arabic_sources / "quran_lemmas_raw.jsonl"),
+                str(quranic_intermediate / "quran_lemmas_raw.jsonl"),
             ],
             required_all_inputs=(data_raw / "arabic" / "quran-morphology" / "quran-morphology.txt",),
-            outputs=(arabic_sources / "quran_lemmas_raw.jsonl",),
+            outputs=(quranic_intermediate / "quran_lemmas_raw.jsonl",),
         ),
         Step(
             name="arabic:ingest_hf_roots",
@@ -145,18 +148,32 @@ def build_steps(*, python_exe: str, repo_root: Path, resources_dir: Path | None)
             outputs=(arabic_sources / "hf_roots.jsonl",),
         ),
         Step(
-            name="arabic:enrich_quran_translit",
-            tags=frozenset({"arabic"}),
+            name="quranic_arabic:enrich_quran_translit",
+            tags=frozenset({"quranic_arabic"}),
             cmd=[
                 python_exe,
                 str(scripts_dir / "enrich_quran_translit.py"),
                 "--input",
-                str(arabic_sources / "quran_lemmas_raw.jsonl"),
+                str(quranic_intermediate / "quran_lemmas_raw.jsonl"),
                 "--output",
-                str(arabic_sources / "quran_lemmas_enriched.jsonl"),
+                str(quranic_sources / "quran_lemmas_enriched.jsonl"),
             ],
-            required_all_inputs=(arabic_sources / "quran_lemmas_raw.jsonl",),
-            outputs=(arabic_sources / "quran_lemmas_enriched.jsonl",),
+            required_all_inputs=(quranic_intermediate / "quran_lemmas_raw.jsonl",),
+            outputs=(quranic_sources / "quran_lemmas_enriched.jsonl",),
+        ),
+        Step(
+            name="quranic_arabic:merge_lexemes",
+            tags=frozenset({"quranic_arabic"}),
+            cmd=[
+                python_exe,
+                str(scripts_dir / "merge_quranic_arabic_lexemes.py"),
+                "--quran",
+                str(quranic_sources / "quran_lemmas_enriched.jsonl"),
+                "--output",
+                str(quranic_out / "lexemes.jsonl"),
+            ],
+            required_all_inputs=(quranic_sources / "quran_lemmas_enriched.jsonl",),
+            outputs=(quranic_out / "lexemes.jsonl",),
         ),
         Step(
             name="arabic:merge_classical_lexemes",
@@ -164,8 +181,6 @@ def build_steps(*, python_exe: str, repo_root: Path, resources_dir: Path | None)
             cmd=[
                 python_exe,
                 str(scripts_dir / "merge_arabic_classical_lexemes.py"),
-                "--quran",
-                str(arabic_sources / "quran_lemmas_enriched.jsonl"),
                 "--word-root-map",
                 str(arabic_sources / "word_root_map_filtered.jsonl"),
                 "--hf-roots",
@@ -174,7 +189,6 @@ def build_steps(*, python_exe: str, repo_root: Path, resources_dir: Path | None)
                 str(arabic_out / "lexemes.jsonl"),
             ],
             required_any_inputs=(
-                arabic_sources / "quran_lemmas_enriched.jsonl",
                 arabic_sources / "word_root_map_filtered.jsonl",
                 arabic_sources / "hf_roots.jsonl",
             ),

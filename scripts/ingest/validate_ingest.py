@@ -7,7 +7,7 @@ Checks:
   - Sample few rows
 
 Usage examples:
-  python validate_ingest.py --input data/processed/arabic/hf_roots.jsonl --sample 5
+  python validate_ingest.py --input data/processed/arabic/classical/sources/hf_roots.jsonl --sample 5
   python validate_ingest.py --input data/processed/english/english_ipa_merged_pos.jsonl --pos-field pos
 """
 

@@ -6,6 +6,7 @@ This document defines the LV0 canonical fields used for Arabic lexeme rows and d
 
 - `lemma` (string, required): the surface form as provided by the source.
 - `language` (string, required): `ara` / `ara-qur` / etc.
+  - Quranic Arabic (`ara-qur`) is treated as an independent language (limited to Quran vocabulary), and its processed outputs live under `data/processed/quranic_arabic/`.
 - `stage` (folder/file level): stage is represented by dataset boundaries (folder/file naming), not required in each row.
 - `script` (optional): can be omitted; downstream can infer when needed.
 - `source` (string, required): dataset/source identifier.

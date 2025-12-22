@@ -26,7 +26,8 @@ from typing import Any, Iterable
 REQUIRED_FIELDS = ("id", "lemma", "language", "source", "lemma_status", "translit", "ipa")
 
 DEFAULT_CANONICAL: tuple[Path, ...] = (
-    Path("data/processed/arabic/classical/sources/quran_lemmas_enriched.jsonl"),
+    Path("data/processed/quranic_arabic/sources/quran_lemmas_enriched.jsonl"),
+    Path("data/processed/quranic_arabic/lexemes.jsonl"),
     Path("data/processed/arabic/classical/sources/hf_roots.jsonl"),
     Path("data/processed/arabic/classical/sources/word_root_map_filtered.jsonl"),
     Path("data/processed/arabic/classical/lexemes.jsonl"),

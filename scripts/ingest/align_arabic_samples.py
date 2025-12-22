@@ -52,8 +52,8 @@ def load_jsonl(path: Path, limit: int) -> List[dict]:
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--hf", type=Path, default=Path("data/processed/arabic/hf_roots.jsonl"))
-    ap.add_argument("--quran", type=Path, default=Path("data/processed/arabic/quran_lemmas_enriched.jsonl"))
+    ap.add_argument("--hf", type=Path, default=Path("data/processed/arabic/classical/sources/hf_roots.jsonl"))
+    ap.add_argument("--quran", type=Path, default=Path("data/processed/quranic_arabic/sources/quran_lemmas_enriched.jsonl"))
     ap.add_argument("--hf-limit", type=int, default=200)
     ap.add_argument("--quran-limit", type=int, default=200)
     ap.add_argument("--out", type=Path, default=Path("outputs/arabic_alignment_samples.csv"))

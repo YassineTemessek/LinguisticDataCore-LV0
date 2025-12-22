@@ -14,10 +14,12 @@ class LanguageBundle:
 
 
 LANGUAGE_BUNDLES: tuple[LanguageBundle, ...] = (
+    LanguageBundle(lang="quranic_arabic", patterns=("data/processed/quranic_arabic/**",)),
     LanguageBundle(lang="arabic", patterns=("data/processed/arabic/**", "data/processed/wiktionary_stardict/**Arabic**")),
     LanguageBundle(lang="english", patterns=("data/processed/english/**", "data/processed/_parts/english_*/**")),
     LanguageBundle(lang="greek", patterns=("data/processed/wiktionary_stardict/**Greek**",)),
     LanguageBundle(lang="latin", patterns=("data/processed/wiktionary_stardict/**Latin**",)),
+    LanguageBundle(lang="german", patterns=("data/processed/wiktionary_stardict/**German**", "data/processed/german/**")),
     LanguageBundle(lang="concepts", patterns=("resources/concepts/**",)),
     LanguageBundle(lang="anchors", patterns=("resources/anchors/**",)),
 )

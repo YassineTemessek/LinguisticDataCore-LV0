@@ -10,6 +10,8 @@ This roadmap is focused on keeping data stable and reproducible for LV2/LV3/LV4.
 - Define stable file naming conventions under `data/processed/` per language/source.
 - Ensure every processed file has provenance fields (source name, stage/script, and stable ids).
 - For Arabic rows with a known `root`, include `root_norm` and `binary_root` (canonical: first 2 letters of the accepted root).
+- Expand language coverage beyond the initial core:
+  - German (`deu`) and additional eastern Indo-European targets (e.g. Slavic / Indo-Iranian) as sources become available.
 - Standardize layout per dataset:
   - `data/processed/<language>/<stage>/sources/<source>.jsonl`
   - `data/processed/<language>/<stage>/lexemes.jsonl` (merged canonical)
@@ -38,7 +40,8 @@ Release format:
 Milestones:
 
 - Ensure `ldc package --version YYYY.MM.DD` produces:
-  - Arabic bundle (arabic + Arabic-related tables)
+  - Quranic Arabic bundle (`ara-qur`, Quran-only)
+  - Arabic bundle (`ara`, general Arabic tables)
   - English bundle (including parts if present)
   - Greek bundle
   - Latin bundle

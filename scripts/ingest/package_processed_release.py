@@ -24,9 +24,11 @@ from typing import Any, Iterable
 
 
 DEFAULT_CANONICAL: tuple[Path, ...] = (
-    Path("data/processed/arabic/quran_lemmas_enriched.jsonl"),
-    Path("data/processed/arabic/hf_roots.jsonl"),
-    Path("data/processed/arabic/word_root_map_filtered.jsonl"),
+    Path("data/processed/quranic_arabic/sources/quran_lemmas_enriched.jsonl"),
+    Path("data/processed/quranic_arabic/lexemes.jsonl"),
+    Path("data/processed/arabic/classical/sources/hf_roots.jsonl"),
+    Path("data/processed/arabic/classical/sources/word_root_map_filtered.jsonl"),
+    Path("data/processed/arabic/classical/lexemes.jsonl"),
     Path("data/processed/english/english_ipa_merged_pos.jsonl"),
     Path("data/processed/wiktionary_stardict/filtered/Latin-English_Wiktionary_dictionary_stardict_filtered.jsonl"),
     Path("data/processed/wiktionary_stardict/filtered/Ancient_Greek-English_Wiktionary_dictionary_stardict_filtered.jsonl"),
@@ -118,7 +120,7 @@ def main() -> None:
     payload = {
         "type": "processed_release_bundle",
         "timestamp_utc": datetime.now(timezone.utc).isoformat(),
-        "repo": "YassineTemessek/LinguisticComparison",
+        "repo": "YassineTemessek/LinguisticDataCore-LV0",
         "git_rev": try_git_rev(repo_root),
         "zip_path": str(out_zip),
         "files": items,
@@ -131,4 +133,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

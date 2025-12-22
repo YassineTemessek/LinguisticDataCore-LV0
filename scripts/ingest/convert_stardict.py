@@ -75,6 +75,14 @@ LANG_META = {
     "Greek-English": ("ell", "Modern", "Greek"),
     "Old_English-English": ("ang", "Old", "Latin"),
     "Middle_English-English": ("enm", "Middle", "Latin"),
+    # Germanic / Slavic / eastern Indo-European targets
+    "German-English": ("deu", "Modern", "Latin"),
+    "Russian-English": ("rus", "Modern", "Cyrillic"),
+    "Ukrainian-English": ("ukr", "Modern", "Cyrillic"),
+    "Polish-English": ("pol", "Modern", "Latin"),
+    "Czech-English": ("ces", "Modern", "Latin"),
+    "Romanian-English": ("ron", "Modern", "Latin"),
+    "Persian-English": ("fas", "Modern", "Arabic"),
 }
 
 
