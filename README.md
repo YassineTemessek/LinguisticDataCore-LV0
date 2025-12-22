@@ -56,7 +56,3 @@ Consume releases (downstream):
 ## Contact 🤝
 
 For collaboration: `yassine.temessek@hotmail.com`
-
-## Suggested GitHub “About” 📝
-
-LV0 data core: deterministic raw→processed pipeline, per-language/stage `lexemes.jsonl`, validation, and release bundles.
