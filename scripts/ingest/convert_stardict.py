@@ -69,6 +69,8 @@ LANG_META = {
     "Akkadian-English": ("akk", "Ancient", "Cuneiform"),
     "Ge'ez-English": ("gez", "Classical", "Ethiopic"),
     "Hebrew-English": ("heb", "Modern", "Hebrew"),
+    "Old_Hebrew-English": ("hbo", "Classical", "Hebrew"),
+    "Biblical_Hebrew-English": ("hbo", "Classical", "Hebrew"),
     # Indo-European / others
     "Latin-English": ("lat", "Classical", "Latin"),
     "Ancient_Greek-English": ("grc", "Classical", "Greek"),

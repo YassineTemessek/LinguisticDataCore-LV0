@@ -20,8 +20,13 @@ LANGUAGE_BUNDLES: tuple[LanguageBundle, ...] = (
     LanguageBundle(lang="greek", patterns=("data/processed/wiktionary_stardict/**Greek**",)),
     LanguageBundle(lang="latin", patterns=("data/processed/wiktionary_stardict/**Latin**",)),
     LanguageBundle(lang="german", patterns=("data/processed/wiktionary_stardict/**German**", "data/processed/german/**")),
+    LanguageBundle(lang="hebrew", patterns=("data/processed/wiktionary_stardict/**Hebrew**", "data/processed/hebrew/**")),
+    LanguageBundle(lang="syriac", patterns=("data/processed/wiktionary_stardict/**Syriac**", "data/processed/syriac/**")),
+    LanguageBundle(lang="akkadian", patterns=("data/processed/wiktionary_stardict/**Akkadian**", "data/processed/akkadian/**")),
     LanguageBundle(lang="concepts", patterns=("resources/concepts/**",)),
     LanguageBundle(lang="anchors", patterns=("resources/anchors/**",)),
+    # Optional: include any locally-provided raw sources (not committed by default).
+    LanguageBundle(lang="raw_sources", patterns=("data/raw/**",)),
 )
 
 
