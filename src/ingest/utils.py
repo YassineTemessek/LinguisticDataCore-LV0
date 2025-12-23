@@ -3,7 +3,9 @@ from __future__ import annotations
 import hashlib
 import json
 from pathlib import Path
-from typing import Iterable, Tuple
+import re
+import unicodedata
+from typing import Iterable, Tuple, List
 
 
 def sha256_file(path: Path) -> str:
@@ -59,3 +61,40 @@ def write_manifest(
     manifest_path.parent.mkdir(parents=True, exist_ok=True)
     manifest_path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
     return payload
+
+
+_WS_RE = re.compile(r"\s+")
+
+
+def normalize_lemma(text: str) -> str:
+    """
+    Normalize lemma for stable IDs: NFKC, lower, trimmed, collapse whitespace.
+    """
+    t = unicodedata.normalize("NFKC", text or "")
+    t = _WS_RE.sub(" ", t).strip().lower()
+    return t
+
+
+def ensure_pos_list(pos_val) -> List[str]:
+    if pos_val is None:
+        return []
+    if isinstance(pos_val, list):
+        return [str(x) for x in pos_val if str(x).strip()]
+    if isinstance(pos_val, str):
+        return [pos_val.strip()] if pos_val.strip() else []
+    return [str(pos_val)]
+
+
+def make_stable_id(language: str, stage: str, source: str, lemma: str, pos_list: List[str], disambiguator: int) -> str:
+    """
+    Deterministic ID builder following the recommended pattern.
+    """
+    lang = (language or "").strip()
+    stg = (stage or "").strip()
+    src = (source or "").strip()
+    norm_lemma = normalize_lemma(lemma)
+    pos_joined = "+".join(pos_list) if pos_list else ""
+    parts = [lang, stg, src, norm_lemma, pos_joined]
+    if disambiguator > 0:
+        parts.append(str(disambiguator))
+    return ":".join(parts)
