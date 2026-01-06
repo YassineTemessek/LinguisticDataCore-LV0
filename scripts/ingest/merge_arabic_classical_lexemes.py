@@ -2,6 +2,7 @@
 Merge Arabic (classical) processed sources into a single canonical lexeme table.
 
 Inputs (default):
+  - data/processed/arabic/classical/sources/quran_lemmas_enriched.jsonl
   - data/processed/arabic/classical/sources/word_root_map_filtered.jsonl
   - data/processed/arabic/classical/sources/hf_roots.jsonl
 
@@ -10,7 +11,7 @@ Output (default):
 
 Notes:
   - This is a *canonical convenience* file: LV0 keeps source-specific files too.
-  - Quranic Arabic (`ara-qur`) is treated as a separate language; it is not merged here by default.
+  - Quranic Arabic (`ara-qur`) can be included; if present, it takes priority when merging conflicts.
   - De-dupe key: (lemma, root_norm). For rootless rows, key is (lemma, "").
   - `translit` and `ipa` fields exist on every output row (may be empty).
 """
@@ -85,6 +86,7 @@ def _pick(dst: dict[str, Any], src: dict[str, Any], key: str) -> None:
 class SourceFile:
     path: Path
     tag: str
+    priority: int
 
 
 def merge_sources(sources: list[SourceFile], *, out_path: Path) -> dict[str, int]:
@@ -93,7 +95,7 @@ def merge_sources(sources: list[SourceFile], *, out_path: Path) -> dict[str, int
     merged: dict[tuple[str, str], dict[str, Any]] = {}
     rows_in = 0
 
-    for src in sources:
+    for src in sorted(sources, key=lambda s: s.priority):
         if not src.path.exists():
             continue
         for rec in iter_jsonl(src.path):
@@ -114,6 +116,7 @@ def merge_sources(sources: list[SourceFile], *, out_path: Path) -> dict[str, int
                     "lemma_status": str(rec.get("lemma_status") or "auto_brut"),
                     "sources": [],
                     "source_refs": [],
+                    "source_priority": src.priority,
                 }
                 merged[key] = cur
 
@@ -121,6 +124,30 @@ def merge_sources(sources: list[SourceFile], *, out_path: Path) -> dict[str, int
             _merge_list_field(cur, {"sources": src.tag}, "sources")
             if _has_text(rec.get("source_ref")):
                 _merge_list_field(cur, {"source_refs": str(rec.get("source_ref"))}, "source_refs")
+
+            # If a higher-priority source arrives (lower number), allow overrides.
+            if int(cur.get("source_priority", 999)) > src.priority:
+                cur["source_priority"] = src.priority
+                for k in (
+                    "root",
+                    "root_norm",
+                    "binary_root",
+                    "binary_root_method",
+                    "binary_root_first2",
+                    "binary_root_weakless_first2",
+                ):
+                    if rec.get(k):
+                        cur[k] = rec.get(k)
+                for k in ("translit", "ipa", "ipa_raw", "gloss_plain", "gloss_html", "definition"):
+                    if rec.get(k):
+                        cur[k] = rec.get(k)
+                if rec.get("pos"):
+                    cur["pos"] = rec.get("pos")
+                if rec.get("pos_tag"):
+                    cur["pos_tag"] = rec.get("pos_tag")
+                if rec.get("example_surface"):
+                    cur["example_surface"] = rec.get("example_surface")
+                continue
 
             # Prefer canonical root-derived fields when present.
             for k in ("root", "root_norm", "binary_root", "binary_root_method", "binary_root_first2", "binary_root_weakless_first2"):
@@ -155,19 +182,24 @@ def merge_sources(sources: list[SourceFile], *, out_path: Path) -> dict[str, int
 
 def main() -> None:
     ap = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    ap.add_argument("--quran", type=Path, default=None, help="Optional extra source (not included by default).")
+    ap.add_argument(
+        "--quran",
+        type=Path,
+        default=Path("data/processed/arabic/classical/sources/quran_lemmas_enriched.jsonl"),
+        help="Optional extra source; if present it is highest priority.",
+    )
     ap.add_argument("--word-root-map", type=Path, default=Path("data/processed/arabic/classical/sources/word_root_map_filtered.jsonl"))
     ap.add_argument("--hf-roots", type=Path, default=Path("data/processed/arabic/classical/sources/hf_roots.jsonl"))
     ap.add_argument("--output", type=Path, default=Path("data/processed/arabic/classical/lexemes.jsonl"))
     args = ap.parse_args()
 
     sources: list[SourceFile] = []
-    if args.quran:
-        sources.append(SourceFile(path=args.quran, tag="quranic-corpus-morphology"))
+    if args.quran and Path(args.quran).exists():
+        sources.append(SourceFile(path=args.quran, tag="quranic-corpus-morphology", priority=1))
     sources.extend(
         [
-            SourceFile(path=args.word_root_map, tag="word_root_map.csv"),
-            SourceFile(path=args.hf_roots, tag="arabic_roots_hf"),
+            SourceFile(path=args.word_root_map, tag="word_root_map.csv", priority=2),
+            SourceFile(path=args.hf_roots, tag="arabic_roots_hf", priority=3),
         ]
     )
     stats = merge_sources(sources, out_path=args.output)
