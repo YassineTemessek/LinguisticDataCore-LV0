@@ -52,6 +52,7 @@ Consume releases (downstream):
 
 - Roadmap (ordered): `docs/ROADMAP.md`
 - Arabic fields (root + binary root): `docs/ARABIC_FIELDS.md`
+- Session start (resume guide): `docs/SESSION_START.md`
 - Pipeline modernization & LV0.7 upgrade scaffolding:
   - `docs/PIPELINE_MODERNIZATION_REVIEW.md` (friend PDF vs. project intent)
   - `docs/PIPELINE_UPGRADE_PLAN.md` (phase-by-phase tasks)
