@@ -508,7 +508,7 @@ You (the machine) are being asked to help with a four-phase research program
 
 ## Implementation note (local folders)
 
-- LV2 workspace: `C:\AI Projects\Arabic-s-Words-decoding-LV2\`
+- LV2 workspace: `Arabic-s-Words-decoding-LV2\`
   - Goal: build processed Arabic tables that maximize word/lemma coverage with known roots and derive a `binary_root` key for regrouping.
 
 3. Phase 3 - Similarity scoring & ranked candidate discovery (LV3)
