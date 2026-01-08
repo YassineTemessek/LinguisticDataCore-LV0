@@ -7,9 +7,15 @@ LV0 is the shared **data core**: it turns raw sources into **canonical processed
 
 All higher levels should *consume* LV0 outputs instead of re-ingesting data independently.
 
+## Role in the stack
+
+LV0 ingests raw sources, normalizes them, validates them, and publishes canonical datasets
+that the rest of the project builds on.
+
 ## Project map 🧭
 
 - LV0 (this repo): `https://github.com/YassineTemessek/LinguisticDataCore-LV0`
+- LV1 (Quranic analysis): `https://github.com/YassineTemessek/Quran-s-Words-decoding-LV1`
 - LV2 (Arabic decoding & clustering): `https://github.com/YassineTemessek/Arabic-s-Words-decoding-LV2`
 - LV3 (cross-language discovery pipeline): `https://github.com/YassineTemessek/LinguisticComparison`
 - LV4 (theory & validation blueprint): `https://github.com/YassineTemessek/OriginOfLanguagesLvl4`
