@@ -19,6 +19,7 @@ Chinese/Old Egyptian are later.
 
 ## Where to start
 
+0) Read project notes: `ReadMe.txt`
 1) Place raw data locally (not committed):
    - See `data/raw/README.md` for expected paths.
 2) Run LV0 ingest:

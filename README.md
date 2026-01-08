@@ -50,6 +50,7 @@ Consume releases (downstream):
 
 ## Docs 📚
 
+- Project ReadMe (master notes): `ReadMe.txt`
 - Roadmap (ordered): `docs/ROADMAP.md`
 - Arabic fields (root + binary root): `docs/ARABIC_FIELDS.md`
 - Session start (resume guide): `docs/SESSION_START.md`
