@@ -544,3 +544,9 @@ At every stage, your main operations are
  Expose the patterns back to the human analyst, who then interprets them conceptually and spiritually.
 
 This is the roadmap. From here, we can refine each phase into concrete scripts, schemas, and experiments one by one.
+
+
+Project Status & Progress
+- Project-wide progress log: docs/PROGRESS_LOG.md
+- Raw data flow (Resources -> LV0 -> processed): docs/RAW_DATA_FLOW.md
+

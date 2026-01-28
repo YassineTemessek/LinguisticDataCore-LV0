@@ -1,6 +1,7 @@
 # LV0 Raw Data (Not Committed)
 
 This folder is where contributors place **raw source datasets** locally before running `ldc ingest`.
+Raw data flow reference: `docs/RAW_DATA_FLOW.md`.
 
 Raw data is intentionally **not committed** to Git by default (size/licensing/provenance).
 
@@ -26,3 +27,7 @@ Examples (Arabic, classical):
 
 - `stage` is treated as a dataset boundary in LV0 (folder/file level), not a required per-row field.
 - After ingest, LV0 writes per-source processed files under `data/processed/<language>/<stage>/sources/` and a merged canonical `lexemes.jsonl`.
+
+
+## Project Status & Progress
+- Project-wide progress log: docs/PROGRESS_LOG.md`n- Raw data flow (Resources -> LV0 -> processed): docs/RAW_DATA_FLOW.md`n
